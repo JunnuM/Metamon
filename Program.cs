@@ -1,4 +1,6 @@
-﻿using Metamon.Combat.Damage;
+﻿using Metamon.Combat;
+using Metamon.Combat.Abilities;
+using Metamon.Combat.Damage;
 using Metamon.Combat.State;
 
 class Program
@@ -8,7 +10,7 @@ class Program
         Console.WriteLine("Started");
 
         // Create attacker (e.g., Warrior)
-        var warrior = new FighterState(
+        var warriorState = new FighterState(
             name: "Warrior",
             health: new HealthAttributes
             {
@@ -21,16 +23,27 @@ class Program
                 Intellect = 2,
                 Wisdom = 1,
                 Agility = 3
-            },
-            resists: new DefenceAttributes
-            {
-                MaxHealth = 100,
-                Armor = 5
             }
+        );
+        var slashAttackDamage = new PhysicalDamage
+        {
+            Amount = 10,
+            FlatArmorPen = 1,
+            PercentageArmorPen = 25
+        };
+        var slashAttack = new Ability(
+            name: "Slash",
+            description: "Sharp and swift slash",
+            cooldown: 10,
+            damages: [slashAttackDamage]
+        );
+        var warrior = new Fighter(
+            state: warriorState,
+            abilities: [slashAttack]
         );
 
         // Create defender (e.g., Frog)
-        var frog = new FighterState(
+        var frogState = new FighterState(
             name: "Frog",
             health: new HealthAttributes
             {
@@ -43,37 +56,18 @@ class Program
                 Intellect = 1,
                 Wisdom = 1,
                 Agility = 2
-            },
-            resists: new DefenceAttributes
-            {
-                MaxHealth = 50,
-                Armor = 4
             }
         );
+        var frog = new Fighter(
+            state: frogState,
+            abilities: []
+        );
 
-        // Create a base physical damage (will scale with attacker strength)
-        var baseDamage = new PhysicalDamage
-        {
-            Amount = 10,
-            FlatArmorPen = 1,
-            PercentageArmorPen = 25
-        };
 
-        // Print pre-combat states
-        Console.WriteLine("Before Damage:");
-        Console.WriteLine(warrior);
-        Console.WriteLine();
-        Console.WriteLine(frog);
-        Console.WriteLine();
-
-        // Scale damage using attacker attributes
-        var scaledDamage = baseDamage.GetDamage(warrior);
-
-        // Apply damage to defender
-        scaledDamage.DealDamage(frog);
-
+        Console.WriteLine(frogState);
+        warrior.ExecuteAbility(0, frog);
         // Print post-combat state
         Console.WriteLine("\nAfter Damage:");
-        Console.WriteLine(frog);
+        Console.WriteLine(frogState);
     }
 }
