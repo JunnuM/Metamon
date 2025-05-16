@@ -6,77 +6,73 @@ class Program
     {
         Console.WriteLine("Started");
 
-        #region Test states
-        // Tadpole – weak, minimal resistances, low attributes
-        var tadpole = new FighterState(
-            name: "Tadpole",
+        // Create attacker (e.g., Warrior)
+        var warrior = new FighterState(
+            name: "Warrior",
             health: new FighterState.HealthAttributes
             {
-                CurrentHealth = 5,
-                MaxHealth = 5,
+                CurrentHealth = 100,
                 CurrentShield = 0
             },
             attrs: new FighterState.AttackAttributes
             {
-                Strength = 1,
+                Strength = 10,
+                Intellect = 2,
+                Wisdom = 1,
+                Agility = 3
+            },
+            resists: new FighterState.DefenceAttributes
+            {
+                MaxHealth = 100,
+                Armor = 5
+            }
+        );
+
+        // Create defender (e.g., Frog)
+        var frog = new FighterState(
+            name: "Frog",
+            health: new FighterState.HealthAttributes
+            {
+                CurrentHealth = 50,
+                CurrentShield = 0
+            },
+            attrs: new FighterState.AttackAttributes
+            {
+                Strength = 3,
                 Intellect = 1,
-                Wisdom = 0,
-                Agility = 3
+                Wisdom = 1,
+                Agility = 2
+            },
+            resists: new FighterState.DefenceAttributes
+            {
+                MaxHealth = 50,
+                Armor = 4
             }
         );
 
-        // Banker – low physical stats, high wisdom (for strategic defense)
-        var banker = new FighterState(
-            name: "Banker",
-            health: new FighterState.HealthAttributes
-            {
-                CurrentHealth = 40,
-                MaxHealth = 40,
-                CurrentShield = 5
-            },
-            attrs: new FighterState.AttackAttributes
-            {
-                Strength = 2,
-                Intellect = 7,
-                Wisdom = 10,
-                Agility = 3
-            },
-            resists: new FighterState.ResistanceAttributes
-            {
-                Physical = 1,
-                Fire = 1,
-                Ice = 1,
-                Arcane = 4
-            }
-        );
+        // Create a base physical damage (will scale with attacker strength)
+        var baseDamage = new PhysicalDamage
+        {
+            Amount = 10,
+            FlatArmorPen = 1,
+            PercentageArmorPen = 25
+        };
 
-        // Wizard – high intellect, low armor, decent arcane resistance
-        var wizard = new FighterState(
-            name: "Wizard",
-            health: new FighterState.HealthAttributes
-            {
-                CurrentHealth = 60,
-                MaxHealth = 60,
-                CurrentShield = 15
-            },
-            attrs: new FighterState.AttackAttributes
-            {
-                Strength = 2,
-                Intellect = 18,
-                Wisdom = 12,
-                Agility = 6
-            },
-            resists: new FighterState.ResistanceAttributes
-            {
-                Physical = 2,
-                Fire = 3,
-                Ice = 3,
-                Arcane = 10
-            }
-        );
-        #endregion
+        // Print pre-combat states
+        Console.WriteLine("Before Damage:");
+        Console.WriteLine(warrior);
+        Console.WriteLine();
+        Console.WriteLine(frog);
+        Console.WriteLine();
 
-        Console.WriteLine(tadpole.ToString());
+        // Scale damage using attacker attributes
+        var scaledDamage = baseDamage.GetDamage(warrior);
 
+        // Apply damage to defender
+        scaledDamage.DealDamage(frog);
+
+        // Print post-combat state
+        Console.WriteLine("\nAfter Damage:");
+        Console.WriteLine(frog);
     }
 }

@@ -3,30 +3,42 @@ namespace Metamon.Combat
     public class FighterState
     {
         public string Name { get; private set; }
-        public HealthAttributes Health { get; private set; }
-        public AttackAttributes Attacks { get; private set; }
-        public ResistanceAttributes Resistances { get; private set; }
+        public HealthAttributes HealthAttrs { get; private set; }
+        public AttackAttributes AttackAttrs { get; private set; }
+        public AttackAttributeMod[] AttackAttrMods { get; private set; } = [];
+        public AttackAttributes AttackAttrsModified()
+        {
+            return AttackAttrMods.Aggregate(AttackAttrs, (current, mod) => mod.GetModified(current));
+        }
+
+        public DefenceAttributes DefenceAttrs { get; private set; }
+        public DefenceAttributeMod[] DefenceAttrMods { get; private set; } = [];
+        public DefenceAttributes DefenceAttrsModified()
+        {
+            return DefenceAttrMods.Aggregate(DefenceAttrs, (current, mod) => mod.GetModified(current));
+        }
+
 
         public override string ToString()
         {
             return $@"
 === Fighter: {Name} ===
-Health:
-  Current Health : {Health.CurrentHealth}
-  Max Health     : {Health.MaxHealth}
-  Current Shield : {Health.CurrentShield}
+Health Attributes:
+  Current Health : {HealthAttrs.CurrentHealth}
+  Current Shield : {HealthAttrs.CurrentShield}
 
 Attack Attributes:
-  Strength  : {Attacks.Strength}
-  Intellect : {Attacks.Intellect}
-  Wisdom    : {Attacks.Wisdom}
-  Agility   : {Attacks.Agility}
+  Strength  : {AttackAttrs.Strength}
+  Intellect : {AttackAttrs.Intellect}
+  Wisdom    : {AttackAttrs.Wisdom}
+  Agility   : {AttackAttrs.Agility}
 
-Resistances:
-  Physical : {Resistances.Physical}
-  Fire     : {Resistances.Fire}
-  Ice      : {Resistances.Ice}
-  Arcane   : {Resistances.Arcane}
+Defence Attributes:
+  Max Health : {DefenceAttrs.MaxHealth}
+  Armor   : {DefenceAttrs.Armor}
+  FireRes       : {DefenceAttrs.FireRes}
+  IceRes        : {DefenceAttrs.IceRes}
+  ArcaneRes     : {DefenceAttrs.ArcaneRes}
 ".Trim();
         }
 
@@ -34,19 +46,18 @@ Resistances:
             string name,
             HealthAttributes health,
             AttackAttributes? attrs = null,
-            ResistanceAttributes? resists = null
+            DefenceAttributes? resists = null
             )
         {
             Name = name;
-            Health = health;
-            Attacks = attrs ?? new AttackAttributes();
-            Resistances = resists ?? new ResistanceAttributes();
+            HealthAttrs = health;
+            AttackAttrs = attrs ?? new AttackAttributes();
+            DefenceAttrs = resists ?? new DefenceAttributes();
         }
 
         public class HealthAttributes
         {
             public int CurrentHealth { get; set; } = 0;
-            public int MaxHealth { get; set; } = 0;
             public int CurrentShield { get; set; } = 0;
         }
 
@@ -58,12 +69,13 @@ Resistances:
             public int Agility { get; set; } = 0;
         }
 
-        public class ResistanceAttributes
+        public class DefenceAttributes
         {
-            public int Physical { get; set; } = 0;
-            public int Fire { get; set; } = 0;
-            public int Ice { get; set; } = 0;
-            public int Arcane { get; set; } = 0;
+            public int MaxHealth { get; set; } = 0;
+            public int Armor { get; set; } = 0;
+            public int FireRes { get; set; } = 0;
+            public int IceRes { get; set; } = 0;
+            public int ArcaneRes { get; set; } = 0;
         }
     }
 }
