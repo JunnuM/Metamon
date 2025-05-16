@@ -1,4 +1,5 @@
-﻿using Metamon.Combat;
+﻿using Metamon.Combat.Damage;
+using Metamon.Combat.State;
 
 class Program
 {
@@ -9,19 +10,19 @@ class Program
         // Create attacker (e.g., Warrior)
         var warrior = new FighterState(
             name: "Warrior",
-            health: new FighterState.HealthAttributes
+            health: new HealthAttributes
             {
                 CurrentHealth = 100,
                 CurrentShield = 0
             },
-            attrs: new FighterState.AttackAttributes
+            attrs: new AttackAttributes
             {
                 Strength = 10,
                 Intellect = 2,
                 Wisdom = 1,
                 Agility = 3
             },
-            resists: new FighterState.DefenceAttributes
+            resists: new DefenceAttributes
             {
                 MaxHealth = 100,
                 Armor = 5
@@ -31,19 +32,19 @@ class Program
         // Create defender (e.g., Frog)
         var frog = new FighterState(
             name: "Frog",
-            health: new FighterState.HealthAttributes
+            health: new HealthAttributes
             {
                 CurrentHealth = 50,
                 CurrentShield = 0
             },
-            attrs: new FighterState.AttackAttributes
+            attrs: new AttackAttributes
             {
                 Strength = 3,
                 Intellect = 1,
                 Wisdom = 1,
                 Agility = 2
             },
-            resists: new FighterState.DefenceAttributes
+            resists: new DefenceAttributes
             {
                 MaxHealth = 50,
                 Armor = 4

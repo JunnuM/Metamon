@@ -1,4 +1,4 @@
-namespace Metamon.Combat
+namespace Metamon.Combat.Damage
 {
     public abstract class DamageMod<T> where T : IDamage
     {
