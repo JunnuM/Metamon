@@ -1,4 +1,5 @@
 using Metamon.Combat.Damage;
+using Metamon.Game;
 
 namespace Metamon.Combat.Abilities
 {
@@ -16,10 +17,20 @@ namespace Metamon.Combat.Abilities
             Description = description;
             Cooldown = cooldown;
             Damages = damages ?? [];
+
+            Clock.CombatTimer.OnTick += UpdateCooldown;
+        }
+
+        private void UpdateCooldown(object? sender, EventArgs e)
+        {
+            CurrentCooldown = Math.Max(CurrentCooldown - 1, 0);
         }
 
         public void Execute(Fighter self, Fighter target)
         {
+            if (CurrentCooldown > 0) return;
+            CurrentCooldown = Cooldown;
+
             foreach (var damage in Damages)
             {
                 var modifiedDamage = damage.GetDamage(self.State);

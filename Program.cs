@@ -2,6 +2,7 @@
 using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
+using Metamon.Game;
 
 class Program
 {
@@ -65,7 +66,6 @@ class Program
 
 
         Console.WriteLine(frogState);
-        warrior.ExecuteAbility(0, frog);
         // Print post-combat state
         Console.WriteLine("\nAfter Damage:");
         Console.WriteLine(frogState);
