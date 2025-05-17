@@ -3,6 +3,7 @@ using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
 using Metamon.Game;
+using Metamon.UI;
 
 class Program
 {
@@ -65,9 +66,6 @@ class Program
         );
 
 
-        Console.WriteLine(frogState);
-        // Print post-combat state
-        Console.WriteLine("\nAfter Damage:");
-        Console.WriteLine(frogState);
+        FightDrawer.Init();
     }
 }
