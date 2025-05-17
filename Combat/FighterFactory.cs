@@ -17,7 +17,8 @@ namespace Metamon.Combat
             CRAZYFROG,
             FISH,
             SNAKE,
-            BANKER
+            BANKER,
+            SEAGRASS
         }
 
         public static Fighter CreateFighter(FighterType type)
@@ -28,6 +29,7 @@ namespace Metamon.Combat
                 FighterType.TADPOLE => TadpoleFighter(),
                 FighterType.FROG => FrogFighter(),
                 FighterType.CRAZYFROG => CrazyFrogFighter(),
+                FighterType.SEAGRASS => SeagrassFighter(),
                 FighterType.FISH => FishFighter(),
                 FighterType.SNAKE => SnakeFighter(),
                 FighterType.BANKER => BankerFighter(),
@@ -85,9 +87,9 @@ namespace Metamon.Combat
             var grow = new Ability(
                 name: "Grow",
                 description: "",
-                cooldown: 10,
+                cooldown: 16,
                 damages: [new EventDamage { OnDeal = (s, t) => {
-                    var success = GlobalRandom.NextBool();
+                    var success = GlobalRandom.NextBool(0.3f);
                     if (success)
                     {
                         DuelDrawer.WriteToBattleLog($"{s.State.Name} grew lungs");
@@ -99,16 +101,18 @@ namespace Metamon.Combat
                 } }]
             );
 
-            var wiggleDash = new Ability("Wiggle Dash", "", 5, [new EventDamage { OnDeal = (s, t) => {
+            var wiggleDash = new Ability("Wiggle Dash", "", 8, [new EventDamage { OnDeal = (s, t) => {
                     DuelDrawer.WriteToBattleLog($"{s.State.Name} became a lot faster");
-                    var agilityMod = new AgilityMod { Name = "Speed++", Multiplier = 4, Duration = 3 };
+                    var agilityMod = new AgilityMod { Name = "Speed++", Multiplier = 4, Duration = 8 };
                     agilityMod.AttachTo(s);
                 }}]);
+
+            var gnaw = new Ability("Gnaw", "", 6, [new PhysicalDamage { Amount = 3 }]);
 
             var abilities = new Ability[]
             {
                 wiggleDash,
-                grow,
+                gnaw,
                 grow,
                 wiggleDash
             };
@@ -230,6 +234,23 @@ namespace Metamon.Combat
             };
 
             return new Fighter(state, FISH_IMAGE, abilities);
+        }
+
+        private static Fighter SeagrassFighter()
+        {
+            var state = new FighterState(
+                "Seagrass",
+                new HealthAttributes { CurrentHealth = 14 },
+                new AttackAttributes { },
+                new DefenceAttributes { MaxHealth = 14 }
+            );
+
+            var abilities = new Ability[]
+            {
+                new("Move", "", 52, [new EventDamage { OnDeal = (s, t) => DuelDrawer.WriteToBattleLog($"{state.Name} moves along the waves") }]),
+            };
+
+            return new Fighter(state, SEAGRASS_IMAGE, abilities);
         }
 
         private static readonly string FROG_IMAGE = @"
@@ -385,5 +406,28 @@ xx++++++++xXx:::;x+;:x;+xxXXxxxxxxxX....:x+xXXx...
 ..................................................
 ..................................................
 ..................................................".Trim();
+
+        private static readonly string SEAGRASS_IMAGE = @"
+...........................:......................
+.........................+X.......................
+.........................$x;......................
+.........................:x++.....................
+.........................xx++...:.................
+..................;....;xxxx...;x+................
+..................+X...x++x...;xx:................
+.................X+x...;x+xX:.+x+x................
+.................X+X.....;xxx:.;Xxx...............
+..................XxX:...:xXx;..+x+X..............
+..................:xX+..xxx+x:.;X++X..............
+..................;xX;:xx+xx:xxxxxx...............
+..................Xxx:x++X.x+++x..................
+.................+xx+.X++x::X+x...................
+.................:Xxx+:+xxX.;X+;..................
+..................:;Xxxx+X$:;X+:..................
+.....................xx;::::xX:...................
+....................$xxx+;+xxX:...................
+.................+X+++XXx++xxxx;..................
+.................:+xxx:....:XXx:..................".Trim();
+
     }
 }

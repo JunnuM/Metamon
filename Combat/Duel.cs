@@ -7,7 +7,7 @@ namespace Metamon.Combat
     public class Duel
     {
         public Fighter PlayerFighter { get; private set; } = FighterFactory.CreateFighter(FighterFactory.FighterType.EGG);
-        public Fighter EnemyFighter { get; private set; } = FighterFactory.CreateFighter(FighterFactory.FighterType.FISH);
+        public Fighter EnemyFighter { get; private set; } = FighterFactory.CreateFighter(FighterFactory.FighterType.SEAGRASS);
 
         public event EventHandler<OnDuelEndedEventArgs>? OnDuelEnded;
         public class OnDuelEndedEventArgs
@@ -23,6 +23,7 @@ namespace Metamon.Combat
         }
 
         private List<Fighter> _enemyFighters = [
+            FighterFactory.CreateFighter(FighterFactory.FighterType.FISH),
             FighterFactory.CreateFighter(FighterFactory.FighterType.SNAKE),
             FighterFactory.CreateFighter(FighterFactory.FighterType.BANKER),
             FighterFactory.CreateFighter(FighterFactory.FighterType.EGG),
