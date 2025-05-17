@@ -4,9 +4,6 @@ namespace Metamon.Combat.Damage
 {
     public interface IDamage
     {
-        // Get damage from status A (e.g. calculate with A's strength)
-        public IDamage GetDamage(FighterState source);
-        // Deal damage to status B
-        public void DealDamage(FighterState target);
+        public void DealDamage(FighterState source, FighterState target);
     }
 }

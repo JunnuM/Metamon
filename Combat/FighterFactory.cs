@@ -1,4 +1,5 @@
 using Metamon.Combat.Abilities;
+using Metamon.Combat.Damage;
 using Metamon.Combat.State;
 
 namespace Metamon.Combat
@@ -99,19 +100,28 @@ namespace Metamon.Combat
                         },
                         defenceAttrs: new DefenceAttributes
                         {
-                            MaxHealth = 15
+                            MaxHealth = 15,
+                            Armor = 1
                         }
                     );
-                        var ability = new Ability(
+                        var leap = new Ability(
                             name: "Leap",
                             description: "",
                             cooldown: 5,
                             damages: []
                         );
+                        var bite = new Ability(
+                            name: "Bite",
+                            description: "",
+                            cooldown: 10,
+                            damages: [new PhysicalDamage{
+                                Amount = 2
+                            }]
+                        );
                         var fighter = new Fighter(
                             state: state,
                             frogImage,
-                            abilities: [ability, ability, ability, ability]
+                            abilities: [leap, bite, bite, leap]
                         );
                         return fighter;
                     }

@@ -6,6 +6,8 @@ namespace Metamon.UI
     public static class DuelDrawer
     {
         private static Duel _duel;
+        private static List<string> _battle_log = ["<<<       Battle log       >>>"];
+        private static readonly int _battle_log_max_length = 10;
 
         public static void Init(Duel duel)
         {
@@ -22,12 +24,21 @@ namespace Metamon.UI
             Clock.CombatTimer.OnTick += OnCombatTimer;
         }
 
+        public static void WriteToBattleLog(string message)
+        {
+            _battle_log.Add(message);
+            if (_battle_log.Count > _battle_log_max_length)
+            {
+                _battle_log.RemoveAt(1); // Leave title
+            }
+        }
+
         private static void OnCombatTimer(object? sender, EventArgs e)
         {
             Update();
         }
 
-        public static void Update()
+        private static void Update()
         {
             // Clear console if needed
             DrawFighters();
@@ -91,8 +102,8 @@ namespace Metamon.UI
 
         private static void DrawBattleLog()
         {
-            ConsoleUtils.DrawWordWrappedText("<<<       Battle log       >>>", 107, 12, 34, 60);
-            // TODO implement battle log
+            var text = string.Join("\n", _battle_log);
+            ConsoleUtils.DrawWordWrappedText(text, 107, 12, 34, 60);
         }
 
         private static readonly string title = @"

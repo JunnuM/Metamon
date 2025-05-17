@@ -39,30 +39,43 @@ namespace Metamon.UI
 
         public static void DrawWordWrappedText(string text, int x, int y, int maxWidth, int maxHeight)
         {
-            var words = text.Split([' '], StringSplitOptions.None);
-            int cursorX = x;
+            var lines = text.Split('\n'); // Handle explicit newlines
             int cursorY = y;
             int linesDrawn = 0;
 
-            foreach (var word in words)
+            foreach (var rawLine in lines)
             {
-                // Wrap to next line if word doesn't fit on current line
-                if (cursorX - x + word.Length + 1 > maxWidth)
-                {
-                    cursorX = x;
-                    cursorY++;
-                    linesDrawn++;
+                var words = rawLine.Split(' ', StringSplitOptions.None);
+                int cursorX = x;
 
-                    if (linesDrawn >= maxHeight)
-                        break;
+                foreach (var word in words)
+                {
+                    // Wrap to next line if word won't fit
+                    if (cursorX - x + word.Length + 1 > maxWidth)
+                    {
+                        cursorX = x;
+                        cursorY++;
+                        linesDrawn++;
+
+                        if (linesDrawn >= maxHeight)
+                            return;
+                    }
+
+                    if (cursorY >= y + maxHeight)
+                        return;
+
+                    Console.SetCursorPosition(cursorX, cursorY);
+                    Console.Write(word + " ");
+                    cursorX += word.Length + 1;
                 }
 
-                if (cursorY >= y + maxHeight)
-                    break;
+                // After explicit line break, move to next line
+                cursorX = x;
+                cursorY++;
+                linesDrawn++;
 
-                Console.SetCursorPosition(cursorX, cursorY);
-                Console.Write(word + " ");
-                cursorX += word.Length + 1;
+                if (linesDrawn >= maxHeight)
+                    return;
             }
         }
 
