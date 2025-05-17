@@ -1,6 +1,7 @@
 using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
+using Metamon.Combat.State.Mods;
 using Metamon.UI;
 
 namespace Metamon.Combat
@@ -67,6 +68,12 @@ namespace Metamon.Combat
                 damages: [
                     new EventDamage { OnDeal = (source, target) =>
                                 {
+                                    var modifier = new AgilityBoost() {
+                                        FlatAddition = 10,
+                                        Duration = 10
+                                    };
+                                    modifier.AttachTo(target);
+                                    /*
                                     var success = GlobalRandom.NextBool();
                                     if (success)
                                     {
@@ -75,7 +82,7 @@ namespace Metamon.Combat
                                     } else
                                     {
                                         DuelDrawer.WriteToBattleLog("Morph failed!");
-                                    }
+                                    } */
                                 }
                                 }
                 ]

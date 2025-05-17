@@ -5,13 +5,13 @@ namespace Metamon.Combat.State
         public string Name { get; private set; }
         public HealthAttributes HealthAttrs { get; private set; }
         public AttackAttributes AttackAttrs { get; private set; }
-        public AttackAttributeMod[] AttackAttrMods { get; private set; } = [];
+        public List<AttackAttributeMod> AttackAttrMods { get; private set; } = [];
         public AttackAttributes AttackAttrsModified()
         {
             return AttackAttrMods.Aggregate(AttackAttrs, (current, mod) => mod.GetModified(current));
         }
         public DefenceAttributes DefenceAttrs { get; private set; }
-        public DefenceAttributeMod[] DefenceAttrMods { get; private set; } = [];
+        public List<DefenceAttributeMod> DefenceAttrMods { get; private set; } = [];
         public DefenceAttributes DefenceAttrsModified()
         {
             return DefenceAttrMods.Aggregate(DefenceAttrs, (current, mod) => mod.GetModified(current));
