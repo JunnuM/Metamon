@@ -1,4 +1,3 @@
-using Metamon.Combat.State;
 using Metamon.UI;
 
 namespace Metamon.Combat.Damage

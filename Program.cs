@@ -8,7 +8,7 @@ class Program
         Console.WriteLine("Started");
 
         var player = FighterFactory.CreateFighter(FighterFactory.FighterType.FROG);
-        var enemy = FighterFactory.CreateFighter(FighterFactory.FighterType.FROG);
+        var enemy = FighterFactory.CreateFighter(FighterFactory.FighterType.EGG);
 
         var duel = new Duel(player, enemy);
         DuelDrawer.Init(duel);
