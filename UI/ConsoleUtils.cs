@@ -66,5 +66,20 @@ namespace Metamon.UI
             }
         }
 
+        public static string GenerateBorderedTextBox(string text, int width = 15)
+        {
+            // Truncate if too long
+            if (text.Length > width - 2) text = text[..(width - 2)];
+
+            int padding = width - 2 - text.Length;
+            int leftPadding = padding / 2;
+            int rightPadding = padding - leftPadding;
+
+            string top = "╔" + new string('═', width - 2) + "╗";
+            string middle = "║" + new string(' ', leftPadding) + text + new string(' ', rightPadding) + "║";
+            string bottom = "╚" + new string('═', width - 2) + "╝";
+
+            return $"{top}\n{middle}\n{bottom}";
+        }
     }
 }

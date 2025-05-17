@@ -14,6 +14,17 @@ namespace Metamon.UI
             ConsoleUtils.DrawImageAt(frog, 56, 12, 0.1f, ConsoleColor.Red, ConsoleColor.Gray);
             ConsoleUtils.DrawImageAt("Evil frog", 56, 31);
             ConsoleUtils.DrawWordWrappedText("<<<       Battle log       >>>", 107, 12, 34, 60);
+
+            var abilityUpText = ConsoleUtils.GenerateBorderedTextBox("Fireball", 25);
+            ConsoleUtils.DrawImageAt(abilityUpText, 41, 33, 0.6f, ConsoleColor.Cyan, ConsoleColor.Gray);
+            var abilityDownText = ConsoleUtils.GenerateBorderedTextBox("Hydropump", 25);
+            ConsoleUtils.DrawImageAt(abilityDownText, 41, 39, 1.0f, ConsoleColor.Cyan, ConsoleColor.Gray);
+            var abilityLeftText = ConsoleUtils.GenerateBorderedTextBox("Evil slash", 25);
+            ConsoleUtils.DrawImageAt(abilityLeftText, 21, 36, 0.2f, ConsoleColor.Cyan, ConsoleColor.Gray);
+            var abilityRightText = ConsoleUtils.GenerateBorderedTextBox("Nap time", 25);
+            ConsoleUtils.DrawImageAt(abilityRightText, 61, 36, 1.0f, ConsoleColor.Cyan, ConsoleColor.Gray);
+
+
         }
 
         public static void Update()
