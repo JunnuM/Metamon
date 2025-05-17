@@ -2,6 +2,7 @@ using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
 using Metamon.Combat.State.Mods;
+using Metamon.Game;
 using Metamon.UI;
 
 namespace Metamon.Combat
@@ -50,7 +51,7 @@ namespace Metamon.Combat
                 damages: [new EventDamage { OnDeal = (s, t) =>
                     {
                         DuelDrawer.WriteToBattleLog("Croak");
-                        // TODO add sound effect
+                        Speakers.Play(Speakers.SoundKey.CROAK);
 
                         var success = GlobalRandom.NextInt(0, 4) == 0;
                         if (success)
