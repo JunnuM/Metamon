@@ -1,12 +1,13 @@
 using Metamon.Game;
+using Metamon.UI;
 using SharpDX.DirectInput;
 
 namespace Metamon.Combat
 {
     public class Duel
     {
-        public Fighter PlayerFighter { get; private set; }
-        public Fighter EnemyFighter { get; private set; }
+        public Fighter PlayerFighter { get; private set; } = FighterFactory.CreateFighter(FighterFactory.FighterType.EGG);
+        public Fighter EnemyFighter { get; private set; } = FighterFactory.CreateFighter(FighterFactory.FighterType.FISH);
 
         public event EventHandler<OnDuelEndedEventArgs>? OnDuelEnded;
         public class OnDuelEndedEventArgs
@@ -21,11 +22,11 @@ namespace Metamon.Combat
             }
         }
 
-        public Duel(Fighter leftFighter, Fighter rightFighter)
-        {
-            PlayerFighter = leftFighter;
-            EnemyFighter = rightFighter;
-        }
+        private List<Fighter> _enemyFighters = [
+            FighterFactory.CreateFighter(FighterFactory.FighterType.SNAKE),
+            FighterFactory.CreateFighter(FighterFactory.FighterType.BANKER),
+            FighterFactory.CreateFighter(FighterFactory.FighterType.EGG),
+        ];
 
         public void Begin()
         {
@@ -102,8 +103,19 @@ namespace Metamon.Combat
             }
             else if (EnemyFighter.State.HealthAttrs.CurrentHealth <= 0)
             {
-                OnDuelEnded?.Invoke(this, new OnDuelEndedEventArgs(PlayerFighter, true));
-                Clock.CombatTimer.OnTick -= CheckDeaths;
+                // Get next fighter
+                if (_enemyFighters.Count > 0)
+                {
+                    DuelDrawer.WriteToBattleLog("Another opponent approaches...");
+                    EnemyFighter = _enemyFighters[0];
+                    _enemyFighters.RemoveAt(0);
+                }
+                else
+                {
+                    OnDuelEnded?.Invoke(this, new OnDuelEndedEventArgs(PlayerFighter, true));
+                    Clock.CombatTimer.OnTick -= CheckDeaths;
+                }
+
             }
         }
     }

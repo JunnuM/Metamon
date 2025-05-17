@@ -14,7 +14,7 @@ namespace Metamon.Game
 
         private Timer? _timer;
 
-        public void Start(double intervalMs = 1000)
+        public void Start(double intervalMs = 300)
         {
             if (_timer != null) return; // prevent multiple starts
 

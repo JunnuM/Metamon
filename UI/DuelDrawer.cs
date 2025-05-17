@@ -100,10 +100,10 @@ namespace Metamon.UI
         {
             // Clear log
             var clearingText = new string(' ', 1000);
-            ConsoleUtils.DrawWordWrappedText(clearingText, 107, 12, 34, 60);
+            ConsoleUtils.DrawWordWrappedText(clearingText, 107, 12, 34, 30);
 
             var text = string.Join("\n", _battle_log);
-            ConsoleUtils.DrawWordWrappedText(text, 107, 12, 34, 60);
+            ConsoleUtils.DrawWordWrappedText(text, 107, 12, 34, 30);
         }
 
         public static void Intro()

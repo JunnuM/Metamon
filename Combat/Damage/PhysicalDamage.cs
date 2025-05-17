@@ -12,10 +12,19 @@ namespace Metamon.Combat.Damage
         // First apply flat armor pen, then percentage. Effective armor is always positive.
         public void DealDamage(Fighter source, Fighter target)
         {
+
             var modifiedAttackAttrs = source.State.AttackAttrsModified();
             var modifiedAmount = Amount + (int)Math.Ceiling(AdditionalStrengthScaling * modifiedAttackAttrs.Strength);
 
             var modifiedDefences = target.State.DefenceAttrsModified();
+            var hitChance = Math.Clamp(target.State.AttackAttrsModified().Agility / 40f, 0, 1);
+            var hit = GlobalRandom.NextBool(hitChance);
+            if (!hit)
+            {
+                DuelDrawer.WriteToBattleLog($"{target.State.Name} dodged an attack");
+                return;
+            }
+
             float rawArmor = modifiedDefences.Armor - FlatArmorPen;
             float effectiveArmor = rawArmor * (1 - PercentageArmorPen * 0.01f);
             int finalArmor = (int)Math.Ceiling(Math.Max(effectiveArmor, 0));

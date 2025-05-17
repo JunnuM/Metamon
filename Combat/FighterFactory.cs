@@ -27,10 +27,10 @@ namespace Metamon.Combat
                 FighterType.EGG => EggFighter(),
                 FighterType.TADPOLE => TadpoleFighter(),
                 FighterType.FROG => FrogFighter(),
+                FighterType.CRAZYFROG => CrazyFrogFighter(),
                 FighterType.FISH => FishFighter(),
                 FighterType.SNAKE => SnakeFighter(),
                 FighterType.BANKER => BankerFighter(),
-                FighterType.CRAZYFROG => CrazyFrogFighter(),
                 _ => EggFighter(),
             };
         }
@@ -47,7 +47,7 @@ namespace Metamon.Combat
             var croak = new Ability(
                 name: "Croak",
                 description: "",
-                cooldown: 2,
+                cooldown: 10,
                 damages: [new EventDamage { OnDeal = (s, t) =>
                     {
                         DuelDrawer.WriteToBattleLog("Croak");
@@ -128,14 +128,14 @@ namespace Metamon.Combat
             var wait = new Ability(
                 name: "Wait",
                 description: "",
-                cooldown: 2,
+                cooldown: 10,
                 damages: [new EventDamage { OnDeal = (s, t) => DuelDrawer.WriteToBattleLog($"{s.State.Name} waits patiently") }]
             );
 
             var hatch = new Ability(
                 name: "Hatch",
                 description: "",
-                cooldown: 3,
+                cooldown: 10,
                 damages: [new EventDamage { OnDeal = (s, t) => {
                     var success = GlobalRandom.NextBool();
                     if (success)
@@ -165,10 +165,8 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Bite", "A venomous bite.", 1, [new PhysicalDamage { Amount = 6, PercentageArmorPen = 10 }]),
-                new("Constrict", "Wrap and squeeze (placeholder).", 2),
-                new("Hiss", "Intimidates the opponent (placeholder).", 2),
-                new("Slither Strike", "Hit and back off.", 1, [new PhysicalDamage { Amount = 4, FlatArmorPen = 2 }])
+                new("Bite", "A venomous bite.", 24, [new PhysicalDamage { Amount = 6, PercentageArmorPen = 10 }]),
+                new("Constrict", "Wrap and squeeze (placeholder).", 18),
             };
 
             return new Fighter(state, SNAKE_IMAGE, abilities);
@@ -185,14 +183,14 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Ding Ding", "", 2, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }, new HealDamage { PercentageAmount = 50 }]),
-                new("Swift Step", "", 8, [new EventDamage { OnDeal = (s, t) => {
-                    var agilityMod = new AgilityMod { Name = "Swiftness", Duration = 5, FlatAddition = 11 };
+                new("Ding Ding", "", 6, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }, new HealDamage { PercentageAmount = 50 }]),
+                new("Swift Step", "", 12, [new EventDamage { OnDeal = (s, t) => {
+                    var agilityMod = new AgilityMod { Name = "Swiftness", Duration = 8, FlatAddition = 11 };
                     agilityMod.AttachTo(s);
                     }
                 }]),
-                new("Turpiinveto", "", 4, [new PhysicalDamage { Amount = 12, AdditionalStrengthScaling = 1.2f }]),
-                new("Crazy Jab", "", 16, [new PhysicalDamage { Amount = 24, PercentageArmorPen = 65 }])
+                new("Turpiinveto", "", 18, [new PhysicalDamage { Amount = 12, AdditionalStrengthScaling = 1.2f }]),
+                new("Crazy Jab", "", 32, [new PhysicalDamage { Amount = 24, PercentageArmorPen = 65 }])
             };
 
             return new Fighter(state, CRAZYFROG_IMAGE, abilities);
@@ -209,10 +207,8 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Audit Beam", "Destroys financial irregularities.", 2, [new ArcaneDamage { Amount = 7, WisdomScaling = 1f }]),
-                new("Paper Shield", "Raises armor temporarily (placeholder).", 3),
-                new("Fine Print", "Debuffs enemy (placeholder).", 2),
-                new("Cash Smash", "Throw coins at the enemy.", 1, [new PhysicalDamage { Amount = 5 }])
+                new("Audit Beam", "Destroys financial irregularities.", 18, [new ArcaneDamage { Amount = 7, WisdomScaling = 1f }]),
+                new("Paper Shield", "Raises armor temporarily (placeholder).", 12),
             };
 
             return new Fighter(state, BANKER_IMAGE, abilities);
@@ -222,17 +218,15 @@ namespace Metamon.Combat
         {
             var state = new FighterState(
                 "Predator Fish",
-                new HealthAttributes { CurrentHealth = 50 },
-                new AttackAttributes { Strength = 8, Agility = 4 },
-                new DefenceAttributes { MaxHealth = 50, Armor = 3 }
+                new HealthAttributes { CurrentHealth = 32 },
+                new AttackAttributes { Strength = 5, Agility = 4 },
+                new DefenceAttributes { MaxHealth = 32, Armor = 2 }
             );
 
             var abilities = new Ability[]
             {
-                new("Bite", "A vicious snap with razor-sharp teeth.", 1, [new PhysicalDamage { Amount = 10, FlatArmorPen = 2 }]),
-                new("Feeding Frenzy", "Strike repeatedly in a flurry of bites.", 3, [new PhysicalDamage { Amount = 4, PercentageArmorPen = 25 }]),
-                new("Blood Scent", "Deal extra damage to already injured enemies (placeholder).", 2),
-                new("Fin Charge", "Ram the target with armored fins.", 2, [new PhysicalDamage { Amount = 6, FlatArmorPen = 1, PercentageArmorPen = 10 }])
+                new("Bite", "A vicious snap with razor-sharp teeth.", 18, [new PhysicalDamage { Amount = 2, FlatArmorPen = 2 }]),
+                new("Blood Scent", "", 52, [new EventDamage { OnDeal = (s, t) => DuelDrawer.WriteToBattleLog($"{state.Name} notices the smell of blood") }]),
             };
 
             return new Fighter(state, FISH_IMAGE, abilities);

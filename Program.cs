@@ -10,12 +10,22 @@ class Program
         GlobalRandom.SetSeed("kakka123".GetHashCode());
 
         DuelDrawer.Intro();
-        Thread.Sleep(9000);
+        Thread.Sleep(4000);
 
-        var player = FighterFactory.CreateFighter(FighterFactory.FighterType.FROG);
-        var enemy = FighterFactory.CreateFighter(FighterFactory.FighterType.FISH);
+        var duel = new Duel();
+        duel.OnDuelEnded += (s, e) =>
+        {
+            duel.Stop();
+            if (e.PlayerWon)
+            {
+                DuelDrawer.Outro_Victory();
+            }
+            else
+            {
+                DuelDrawer.Outro_Defeat();
+            }
+        };
 
-        var duel = new Duel(player, enemy);
         DuelDrawer.Init(duel);
         Speakers.Play(Speakers.SoundKey.MUSIC, true);
         duel.Begin();

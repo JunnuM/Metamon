@@ -14,6 +14,11 @@ namespace Metamon.Combat
             return _rng.Next(2) == 0;
         }
 
+        public static bool NextBool(float successRate)
+        {
+            return NextFloat() >= successRate;
+        }
+
         public static int NextInt(int min, int max)
         {
             return _rng.Next(min, max);
@@ -23,5 +28,6 @@ namespace Metamon.Combat
         {
             return (float)_rng.NextDouble();
         }
+
     }
 }
