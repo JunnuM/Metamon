@@ -32,8 +32,18 @@ namespace Metamon.Combat
             Clock.CombatTimer.Start();
             Clock.CombatTimer.OnTick += CheckDeaths;
             Clock.CombatTimer.OnTick += ControlPlayer;
+            Clock.CombatTimer.OnTick += ControlEnemy;
 
             InitializeController();
+        }
+
+        private void ControlEnemy(object? sender, EventArgs e)
+        {
+            var randomAbility = GlobalRandom.NextInt(0, 5);
+            if (EnemyFighter.Abilities[randomAbility] != null)
+            {
+                EnemyFighter.ExecuteAbility(randomAbility, PlayerFighter);
+            }
         }
 
         private Joystick _joystick;
