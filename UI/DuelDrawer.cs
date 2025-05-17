@@ -7,7 +7,7 @@ namespace Metamon.UI
     {
         private static Duel _duel;
         private static List<string> _battle_log = ["<<<       Battle log       >>>"];
-        private static readonly int _battle_log_max_length = 10;
+        private static readonly int _battle_log_max_length = 16;
 
         public static void Init(Duel duel)
         {
@@ -102,6 +102,10 @@ namespace Metamon.UI
 
         private static void DrawBattleLog()
         {
+            // Clear log
+            var clearingText = new string(' ', 1000);
+            ConsoleUtils.DrawWordWrappedText(clearingText, 107, 12, 34, 60);
+
             var text = string.Join("\n", _battle_log);
             ConsoleUtils.DrawWordWrappedText(text, 107, 12, 34, 60);
         }

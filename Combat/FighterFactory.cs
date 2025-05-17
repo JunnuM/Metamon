@@ -1,6 +1,7 @@
 using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
+using Metamon.Combat.State.Mods;
 using Metamon.UI;
 
 namespace Metamon.Combat
@@ -12,6 +13,7 @@ namespace Metamon.Combat
             EGG,
             TADPOLE,
             FROG,
+            CRAZYFROG,
             FISH,
             SNAKE,
             BANKER
@@ -27,6 +29,7 @@ namespace Metamon.Combat
                 FighterType.FISH => FishFighter(),
                 FighterType.SNAKE => SnakeFighter(),
                 FighterType.BANKER => BankerFighter(),
+                FighterType.CRAZYFROG => CrazyFrogFighter(),
                 _ => EggFighter(),
             };
         }
@@ -40,12 +43,30 @@ namespace Metamon.Combat
                 new DefenceAttributes { MaxHealth = 30, Armor = 2, IceRes = 1 }
             );
 
+            var croak = new Ability(
+                name: "Croak",
+                description: "",
+                cooldown: 2,
+                damages: [new EventDamage { OnDeal = (s, t) =>
+                    {
+                        DuelDrawer.WriteToBattleLog("Croak");
+                        // TODO add sound effect
+
+                        var success = GlobalRandom.NextInt(0, 4) == 0;
+                        if (success)
+                        {
+                            s.TransformInto(CrazyFrogFighter());
+                        }
+                    }
+                }]
+            );
+
             var abilities = new Ability[]
             {
-                new("Leap Strike", "", 1, [new PhysicalDamage { Amount = 6 }]),
-                new("Croak", "", 2, [new EventDamage{OnDeal = (s, t) => DuelDrawer.WriteToBattleLog("Croak")}]),
-                new("Water Kick", "", 1, [new PhysicalDamage { Amount = 4, FlatArmorPen = 1 }]),
-                new("Morph", "", 10, [])
+                new("Leap Strike", "", 3, [new PhysicalDamage { Amount = 6 }]),
+                croak,
+                new("Water Kick", "", 4, [new PhysicalDamage { Amount = 4, FlatArmorPen = 3 }]),
+                croak
             };
 
             return new Fighter(state, FROG_IMAGE, abilities);
@@ -60,12 +81,35 @@ namespace Metamon.Combat
                 new DefenceAttributes { MaxHealth = 15, Armor = 0, IceRes = 1 }
             );
 
+            var grow = new Ability(
+                name: "Grow",
+                description: "",
+                cooldown: 10,
+                damages: [new EventDamage { OnDeal = (s, t) => {
+                    var success = GlobalRandom.NextBool();
+                    if (success)
+                    {
+                        DuelDrawer.WriteToBattleLog($"{s.State.Name} grew lungs");
+                        s.TransformInto(FrogFighter());
+                    } else
+                    {
+                        DuelDrawer.WriteToBattleLog($"{s.State.Name} grows slightly larger");
+                    }
+                } }]
+            );
+
+            var wiggleDash = new Ability("Wiggle Dash", "", 5, [new EventDamage { OnDeal = (s, t) => {
+                    DuelDrawer.WriteToBattleLog($"{s.State.Name} became a lot faster");
+                    var agilityMod = new AgilityMod { Name = "Speed++", Multiplier = 4, Duration = 3 };
+                    agilityMod.AttachTo(s);
+                }}]);
+
             var abilities = new Ability[]
             {
-                new("Wiggle Dash", "A rapid dart to evade and reposition.", 1),
-                new("Tail Flick", "A quick slap of the tail.", 1, [new PhysicalDamage { Amount = 3 }]),
-                new("Murk Cloud", "Stir up silt to obscure vision.", 2), // Placeholder for blind/debuff
-                new("Slipstream", "Speed boost for the next turn.", 2) // Could apply a FighterStateMod
+                wiggleDash,
+                grow,
+                grow,
+                wiggleDash
             };
 
             return new Fighter(state, TADPOLE_IMAGE, abilities);
@@ -80,13 +124,31 @@ namespace Metamon.Combat
                 new DefenceAttributes { MaxHealth = 5, Armor = 0 }
             );
 
-            var abilities = new Ability[]
-            {
-                new("Wiggle Dash", "A rapid dart to evade and reposition.", 1),
-                new("Tail Flick", "A quick slap of the tail.", 1, [new PhysicalDamage { Amount = 3 }]),
-                new("Murk Cloud", "Stir up silt to obscure vision.", 2), // Placeholder for blind/debuff
-                new("Slipstream", "Speed boost for the next turn.", 2) // Could apply a FighterStateMod
-            };
+            var wait = new Ability(
+                name: "Wait",
+                description: "",
+                cooldown: 2,
+                damages: [new EventDamage { OnDeal = (s, t) => DuelDrawer.WriteToBattleLog($"{s.State.Name} waits patiently") }]
+            );
+
+            var hatch = new Ability(
+                name: "Hatch",
+                description: "",
+                cooldown: 3,
+                damages: [new EventDamage { OnDeal = (s, t) => {
+                    var success = GlobalRandom.NextBool();
+                    if (success)
+                    {
+                        DuelDrawer.WriteToBattleLog($"{s.State.Name} succesfully hatched");
+                        s.TransformInto(TadpoleFighter());
+                    } else
+                    {
+                        DuelDrawer.WriteToBattleLog($"{s.State.Name} struggles to break its shell");
+                    }
+                } }]
+            );
+
+            var abilities = new Ability[] { wait, hatch, hatch, wait };
 
             return new Fighter(state, EGG_IMAGE, abilities);
         }
@@ -116,16 +178,20 @@ namespace Metamon.Combat
             var state = new FighterState(
                 "Crazy Frog",
                 new HealthAttributes { CurrentHealth = 45 },
-                new AttackAttributes { Strength = 6, Agility = 7 },
+                new AttackAttributes { Strength = 6, Agility = 7, Intellect = 8, Wisdom = 16 },
                 new DefenceAttributes { MaxHealth = 45, Armor = 3 }
             );
 
             var abilities = new Ability[]
             {
-                new("CHAOS PUNCH", "A wild unpredictable strike.", 1, [new PhysicalDamage { Amount = 8, PercentageArmorPen = 20 }]),
-                new("Lick Zap", "Magical tongue with electric spark.", 2, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }]),
-                new("Ribbit Slam", "Hits everyone (placeholder).", 3),
-                new("Evade!", "Boost agility (placeholder).", 2)
+                new("Ding Ding", "", 2, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }, new HealDamage { PercentageAmount = 50 }]),
+                new("Swift Step", "", 8, [new EventDamage { OnDeal = (s, t) => {
+                    var agilityMod = new AgilityMod { Name = "Swiftness", Duration = 5, FlatAddition = 11 };
+                    agilityMod.AttachTo(s);
+                    }
+                }]),
+                new("Turpiinveto", "", 4, [new PhysicalDamage { Amount = 12, AdditionalStrengthScaling = 1.2f }]),
+                new("Crazy Jab", "", 16, [new PhysicalDamage { Amount = 24, PercentageArmorPen = 65 }])
             };
 
             return new Fighter(state, CRAZYFROG_IMAGE, abilities);
@@ -168,7 +234,7 @@ namespace Metamon.Combat
                 new("Fin Charge", "Ram the target with armored fins.", 2, [new PhysicalDamage { Amount = 6, FlatArmorPen = 1, PercentageArmorPen = 10 }])
             };
 
-            return new Fighter(state, "🦈", abilities);
+            return new Fighter(state, FISH_IMAGE, abilities);
         }
 
         private static readonly string FROG_IMAGE = @"

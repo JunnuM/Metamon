@@ -24,5 +24,12 @@ namespace Metamon.Combat
                 ability.Execute(this, target);
             }
         }
+
+        public void TransformInto(Fighter target)
+        {
+            State = target.State;
+            Image = target.Image;
+            Abilities = target.Abilities;
+        }
     }
 }
