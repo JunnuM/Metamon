@@ -9,6 +9,9 @@ class Program
         Console.WriteLine("Started");
         GlobalRandom.SetSeed("kakka123".GetHashCode());
 
+        DuelDrawer.Intro();
+        Thread.Sleep(9000);
+
         var player = FighterFactory.CreateFighter(FighterFactory.FighterType.FROG);
         var enemy = FighterFactory.CreateFighter(FighterFactory.FighterType.FISH);
 

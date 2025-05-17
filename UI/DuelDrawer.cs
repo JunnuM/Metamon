@@ -48,7 +48,7 @@ namespace Metamon.UI
 
         private static void DrawTitle()
         {
-            ConsoleUtils.DrawImageAt(title, 1, 1);
+            ConsoleUtils.DrawImageAt(TITLE, 1, 1);
         }
 
         private static void DrawFighters()
@@ -110,7 +110,22 @@ namespace Metamon.UI
             ConsoleUtils.DrawWordWrappedText(text, 107, 12, 34, 60);
         }
 
-        private static readonly string title = @"
+        public static void Intro()
+        {
+            Console.Clear();
+
+            var titleLines = TITLE.Split('\n');
+            for (int i = 0; i < titleLines.Length; i++)
+            {
+                var line = titleLines[i];
+                ConsoleUtils.DrawImageAt(line, 1, 1 + i);
+                Thread.Sleep(300);
+            }
+
+            ConsoleUtils.DrawWordWrappedText(GUIDE, 1, 14, 80, 80);
+        }
+
+        private static readonly string TITLE = @"
 &&&&&&&&&&    &&&&&&&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&    &&&&&&&      &&&&&&&&&&&   &&&&&&&&&&&     &&&&&&&&&&&     &&&&&&&&& &&&&&&&&
 &&&&&&&&&&&  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&    &&&&&&&&     &&&&&&&&&&&  $&&&&&&&&&&&   &&&&&&&&&&&&&&&   &&&&&&&&& &&&&&&&&
  &&&&&&&&&&& &&&&&&&&&$    &&&&&&  &&&&&&&&&&& &&&&&& &&&&&   &&&&&&&&&       &&&&&&&&&& &&&&&&&&&&&  &&&&&&&    &&&&&&&   &&&&&&&&& $&&&&& 
@@ -121,5 +136,22 @@ namespace Metamon.UI
  &&&&&&  &&&&&&  &&&&&$    &&&&&&  $&&&&       &&&&&&      &&&&&&   &&&&&&$   &&&&&  &&&&&&  &&&&&&&  &&&&&&&    &&&&&&&   &&&&&X  &&&&&&&& 
 &&&&&&&& &&&&& &&&&&&&&&&&&&&&&&&&&&&&&&     &&&&&&&&&&  &&&&&&&&  &&&&&&&&&&&&&&&&&& &&&&& &&&&&&&&&   &&&&&&&&&&&&&&&   &&&&&&&&  &&&&&&& 
 &&&&&&&&       &&&&&&&&&&&&&&&&&&&&&&&&&     &&&&&&&&&&  &&&&&&&&  &&&&&&&&&&&&&&&&&&       &&&&&&&&&     &&&&&&&&&&&     &&&&&&&&  &&&&&&& ".Trim();
+
+
+        private static readonly string GUIDE = @"
+Welcome to Metamon.
+
+To your left, you will see yourself: your story starts as an egg.
+Will you survive through your transformations?
+
+Tip:
+- Abilities match the arrows on the dance mat
+- Red = Health
+
+
+Music by Juhani Junkala from opengameart (CC0)
+Game by Juhana Moilanen for the METAMORPHOSIS game jam
+        ".Trim();
+
     }
 }
