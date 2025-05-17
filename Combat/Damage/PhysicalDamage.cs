@@ -4,7 +4,7 @@ namespace Metamon.Combat.Damage
 {
     public class PhysicalDamage : IDamage
     {
-        public int Amount { get; set; }
+        public int Amount { get; set; } = 1;
         public float AdditionalStrengthScaling { get; set; } = 0;
         public int FlatArmorPen { get; set; } = 0;
         public int PercentageArmorPen { get; set; } = 0; // [0, 100]
@@ -12,8 +12,8 @@ namespace Metamon.Combat.Damage
         // First apply flat armor pen, then percentage. Effective armor is always positive.
         public void DealDamage(Fighter source, Fighter target)
         {
-            var modifiecAttackAttrs = source.State.AttackAttrsModified();
-            var modifiedAmount = Amount + (int)Math.Ceiling(AdditionalStrengthScaling * modifiecAttackAttrs.Strength);
+            var modifiedAttackAttrs = source.State.AttackAttrsModified();
+            var modifiedAmount = Amount + (int)Math.Ceiling(AdditionalStrengthScaling * modifiedAttackAttrs.Strength);
 
             var modifiedDefences = target.State.DefenceAttrsModified();
             float rawArmor = modifiedDefences.Armor - FlatArmorPen;
