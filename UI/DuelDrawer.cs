@@ -13,11 +13,7 @@ namespace Metamon.UI
         {
             _duel = duel;
 
-            Console.Title = "Metamon";
-            Console.CursorVisible = false;
             Console.Clear();
-
-            // TODO Fun initialization sequence
 
             DrawTitle();
 
@@ -112,6 +108,8 @@ namespace Metamon.UI
 
         public static void Intro()
         {
+            Console.Title = "Metamon";
+            Console.CursorVisible = false;
             Console.Clear();
 
             var titleLines = TITLE.Split('\n');
@@ -123,6 +121,38 @@ namespace Metamon.UI
             }
 
             ConsoleUtils.DrawWordWrappedText(GUIDE, 1, 14, 80, 80);
+        }
+
+        public static void Outro_Defeat()
+        {
+            Console.Clear();
+
+            var titleLines = TITLE.Split('\n');
+            for (int i = 0; i < titleLines.Length; i++)
+            {
+                var line = titleLines[i];
+                ConsoleUtils.DrawImageAt(line, 1, 1 + i);
+                Thread.Sleep(300);
+            }
+
+            ConsoleUtils.DrawImageAt(FROG_IMAGE, 50, 15, 1, ConsoleColor.Blue, ConsoleColor.Black);
+            ConsoleUtils.DrawWordWrappedText(DEFEAT, 3, 16, 80, 80);
+        }
+
+        public static void Outro_Victory()
+        {
+            Console.Clear();
+
+            var titleLines = TITLE.Split('\n');
+            for (int i = 0; i < titleLines.Length; i++)
+            {
+                var line = titleLines[i];
+                ConsoleUtils.DrawImageAt(line, 1, 1 + i);
+                Thread.Sleep(300);
+            }
+
+            ConsoleUtils.DrawImageAt(FROG_IMAGE, 50, 15, 1, ConsoleColor.Green, ConsoleColor.Black);
+            ConsoleUtils.DrawWordWrappedText(VICTORY, 3, 16, 80, 80);
         }
 
         private static readonly string TITLE = @"
@@ -152,6 +182,40 @@ Tip:
 Music by Juhani Junkala from opengameart (CC0)
 Game by Juhana Moilanen for the METAMORPHOSIS game jam
         ".Trim();
+
+        private static readonly string DEFEAT = @"
+Defeated
+
+Please restart to retry.
+        ".Trim();
+
+        private static readonly string VICTORY = @"
+Victory
+
+Thanks for playing! -Juhana
+";
+
+        private static readonly string FROG_IMAGE = @"
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------==----------------
+------------------------------*******=------------
+---------------------------=+***@%***+**#*=-------
+----------------------=******++*##**********=-----
+-----------------=+*****##******************=-----
+--------------*#++*%#%*%%+**************##*-------
+-----------+*********+*##*******=======+=---------
+---------**#######%#**#%##*#*+======*=------------
+-------#******+********#++========+=--------------
+-----*#*#**###***#*+=============+=---------------
+----=#**********++**+========*===#----------------
+-----+#*#*#*++++++++++++*+===#===*+++++-----------
+-----=******+++++++*+***+++*=-+===++**+=----------
+-----=*************#*+*+#+----====+++**=----------
+-------+**#***#*#****#*--------+====**+=----------
+-------------#**##***+*+=--------*==+**=----------
+-------------=++****+++*=----------==++=----------
+--------------------------------------------------".Trim();
 
     }
 }
