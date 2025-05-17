@@ -6,11 +6,13 @@ namespace Metamon.Combat
     public class Fighter
     {
         public FighterState State { get; private set; }
-        public Ability[] Abilities { get; private set; } = [];
+        public string Image { get; private set; }
+        public Ability[] Abilities { get; private set; } = new Ability[4];
 
-        public Fighter(FighterState state, Ability[]? abilities = null)
+        public Fighter(FighterState state, string image, Ability[]? abilities = null)
         {
             State = state;
+            Image = image;
             Abilities = abilities ?? [];
         }
 

@@ -19,15 +19,23 @@ namespace Metamon.Combat.State
 
         public FighterState(
             string name,
-            HealthAttributes health,
-            AttackAttributes? attrs = null,
-            DefenceAttributes? resists = null
+            HealthAttributes healthAttrs,
+            AttackAttributes? attackAttrs = null,
+            DefenceAttributes? defenceAttrs = null
             )
         {
             Name = name;
-            HealthAttrs = health;
-            AttackAttrs = attrs ?? new AttackAttributes();
-            DefenceAttrs = resists ?? new DefenceAttributes();
+            HealthAttrs = healthAttrs;
+            AttackAttrs = attackAttrs ?? new AttackAttributes();
+            DefenceAttrs = defenceAttrs ?? new DefenceAttributes();
+        }
+
+        public float HealthNormalized()
+        {
+            var current = (float)HealthAttrs.CurrentHealth + HealthAttrs.CurrentShield;
+            var max = (float)DefenceAttrsModified().MaxHealth + HealthAttrs.CurrentShield;
+
+            return current / max;
         }
 
         public override string ToString()

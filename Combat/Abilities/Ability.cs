@@ -26,6 +26,11 @@ namespace Metamon.Combat.Abilities
             CurrentCooldown = Math.Max(CurrentCooldown - 1, 0);
         }
 
+        public float CooldownNormalized()
+        {
+            return (float)CurrentCooldown / Cooldown;
+        }
+
         public void Execute(Fighter self, Fighter target)
         {
             if (CurrentCooldown > 0) return;
