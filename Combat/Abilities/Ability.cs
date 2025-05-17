@@ -38,7 +38,7 @@ namespace Metamon.Combat.Abilities
 
             foreach (var damage in Damages)
             {
-                damage.DealDamage(self.State, target.State);
+                damage.DealDamage(self, target);
             }
         }
     }

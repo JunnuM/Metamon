@@ -4,6 +4,6 @@ namespace Metamon.Combat.Damage
 {
     public interface IDamage
     {
-        public void DealDamage(FighterState source, FighterState target);
+        public void DealDamage(Fighter source, Fighter target);
     }
 }
