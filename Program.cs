@@ -14,6 +14,7 @@ class Program
 
         var duel = new Duel(player, enemy);
         DuelDrawer.Init(duel);
+        Speakers.Play(Speakers.SoundKey.MUSIC, true);
         duel.Begin();
 
         while (true) { Thread.Sleep(10); } // Keep the game running

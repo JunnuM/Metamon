@@ -7,7 +7,7 @@ namespace Metamon.UI
     {
         private static Duel _duel;
         private static List<string> _battle_log = ["<<<       Battle log       >>>"];
-        private static readonly int _battle_log_max_length = 16;
+        private static readonly int _battle_log_max_length = 32;
 
         public static void Init(Duel duel)
         {
