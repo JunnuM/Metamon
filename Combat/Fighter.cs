@@ -18,8 +18,11 @@ namespace Metamon.Combat
 
         public void ExecuteAbility(int index, Fighter target)
         {
-            var ability = Abilities[index];
-            ability.Execute(this, target);
+            if (index >= 0 && index < Abilities.Length && Abilities[index] != null)
+            {
+                var ability = Abilities[index];
+                ability.Execute(this, target);
+            }
         }
     }
 }
