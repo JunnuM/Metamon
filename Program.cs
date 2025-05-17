@@ -10,7 +10,7 @@ class Program
         GlobalRandom.SetSeed("kakka123".GetHashCode());
 
         DuelDrawer.Intro();
-        Thread.Sleep(4000);
+        Thread.Sleep(7000);
 
         var duel = new Duel();
         duel.OnDuelEnded += (s, e) =>
