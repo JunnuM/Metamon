@@ -1,6 +1,7 @@
 using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
+using Metamon.UI;
 
 namespace Metamon.Combat
 {
@@ -118,10 +119,25 @@ namespace Metamon.Combat
                                 Amount = 2
                             }]
                         );
+                        var test = new Ability(
+                            name: "Evolve",
+                            description: "",
+                            cooldown: 1,
+                            damages: [
+                                new EventDamage { OnDeal = (source, target) =>
+                                {
+                                    if (GlobalRandom.NextBool())
+                                    {
+                                        DuelDrawer.WriteToBattleLog("Evolve!");
+                                    }
+                                }
+                                }
+                            ]
+                        );
                         var fighter = new Fighter(
                             state: state,
                             frogImage,
-                            abilities: [leap, bite, bite, leap]
+                            abilities: [leap, bite, test, leap]
                         );
                         return fighter;
                     }
