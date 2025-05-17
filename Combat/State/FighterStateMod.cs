@@ -1,10 +1,12 @@
 using Metamon.Combat.State;
 using Metamon.Game;
+using Metamon.UI;
 
 namespace Metamon.Combat
 {
     public abstract class DefenceAttributeMod
     {
+        public string Name { get; set; } = "";
         public int Duration { get; set; } = 1;
         private int _duration_left = 1;
         private Fighter? _attached_to;
@@ -25,6 +27,7 @@ namespace Metamon.Combat
             {
                 _attached_to?.State.DefenceAttrMods.Remove(this);
                 Clock.CombatTimer.OnTick -= UpdateTimer;
+                DuelDrawer.WriteToBattleLog($"{Name} has run out on {_attached_to?.State.Name}");
             }
         }
 
@@ -33,6 +36,7 @@ namespace Metamon.Combat
 
     public abstract class AttackAttributeMod
     {
+        public string Name { get; set; } = "";
         public int Duration { get; set; } = 1;
         private int _duration_left = 1;
         private Fighter? _attached_to;
@@ -53,6 +57,7 @@ namespace Metamon.Combat
             {
                 _attached_to?.State.AttackAttrMods.Remove(this);
                 Clock.CombatTimer.OnTick -= UpdateTimer;
+                DuelDrawer.WriteToBattleLog($"{Name} has run out on {_attached_to?.State.Name}");
             }
         }
 

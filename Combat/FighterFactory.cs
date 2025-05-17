@@ -67,7 +67,7 @@ namespace Metamon.Combat
                 damages: [
                     new EventDamage { OnDeal = (source, target) =>
                                 {
-                                    var modifier = new AgilityBoost() {
+                                    var modifier = new AgilityMod() {
                                         FlatAddition = 10,
                                         Duration = 10
                                     };
