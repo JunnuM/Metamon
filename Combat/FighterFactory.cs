@@ -1,7 +1,7 @@
 using Metamon.Combat.Abilities;
 using Metamon.Combat.Damage;
 using Metamon.Combat.State;
-using Metamon.Combat.State.Mods;
+using Metamon.UI;
 
 namespace Metamon.Combat
 {
@@ -11,7 +11,10 @@ namespace Metamon.Combat
         {
             EGG,
             TADPOLE,
-            FROG
+            FROG,
+            FISH,
+            SNAKE,
+            BANKER
         }
 
         public static Fighter CreateFighter(FighterType type)
@@ -21,6 +24,9 @@ namespace Metamon.Combat
                 FighterType.EGG => EggFighter(),
                 FighterType.TADPOLE => TadpoleFighter(),
                 FighterType.FROG => FrogFighter(),
+                FighterType.FISH => FishFighter(),
+                FighterType.SNAKE => SnakeFighter(),
+                FighterType.BANKER => BankerFighter(),
                 _ => EggFighter(),
             };
         }
@@ -28,138 +34,141 @@ namespace Metamon.Combat
         private static Fighter FrogFighter()
         {
             var state = new FighterState(
-                                    name: "Frog",
-                                    healthAttrs: new HealthAttributes
-                                    {
-                                        CurrentHealth = 15
-                                    },
-                                    attackAttrs: new AttackAttributes
-                                    {
-                                        Strength = 5,
-                                        Intellect = 2,
-                                        Wisdom = 1,
-                                        Agility = 12
-                                    },
-                                    defenceAttrs: new DefenceAttributes
-                                    {
-                                        MaxHealth = 15,
-                                        Armor = 1
-                                    }
-                                );
-            var leap = new Ability(
-                name: "Leap",
-                description: "",
-                cooldown: 5,
-                damages: []
+                "Frog",
+                new HealthAttributes { CurrentHealth = 30 },
+                new AttackAttributes { Strength = 4, Agility = 5 },
+                new DefenceAttributes { MaxHealth = 30, Armor = 2, IceRes = 1 }
             );
-            var bite = new Ability(
-                name: "Bite",
-                description: "",
-                cooldown: 10,
-                damages: [new PhysicalDamage{
-                                Amount = 2
-                            }]
-            );
-            var morph = new Ability(
-                name: "Morph",
-                description: "",
-                cooldown: 6,
-                damages: [
-                    new EventDamage { OnDeal = (source, target) =>
-                                {
-                                    var modifier = new AgilityMod() {
-                                        FlatAddition = 10,
-                                        Duration = 10
-                                    };
-                                    modifier.AttachTo(target);
-                                    /*
-                                    var success = GlobalRandom.NextBool();
-                                    if (success)
-                                    {
-                                        DuelDrawer.WriteToBattleLog("Your legs keep on streching!");
-                                        var next = TadpoleFighter();
-                                    } else
-                                    {
-                                        DuelDrawer.WriteToBattleLog("Morph failed!");
-                                    } */
-                                }
-                                }
-                ]
-            );
-            var fighter = new Fighter(
-                state: state,
-                FROG_IMAGE,
-                abilities: [leap, bite, morph, leap]
-            );
-            return fighter;
+
+            var abilities = new Ability[]
+            {
+                new("Leap Strike", "", 1, [new PhysicalDamage { Amount = 6 }]),
+                new("Croak", "", 2, [new EventDamage{OnDeal = (s, t) => DuelDrawer.WriteToBattleLog("Croak")}]),
+                new("Water Kick", "", 1, [new PhysicalDamage { Amount = 4, FlatArmorPen = 1 }]),
+                new("Morph", "", 10, [])
+            };
+
+            return new Fighter(state, FROG_IMAGE, abilities);
         }
 
         private static Fighter TadpoleFighter()
         {
             var state = new FighterState(
-                                    name: "Tadpole",
-                                    healthAttrs: new HealthAttributes
-                                    {
-                                        CurrentHealth = 9
-                                    },
-                                    attackAttrs: new AttackAttributes
-                                    {
-                                        Strength = 1,
-                                        Intellect = 0,
-                                        Wisdom = 0,
-                                        Agility = 6
-                                    },
-                                    defenceAttrs: new DefenceAttributes
-                                    {
-                                        MaxHealth = 9
-                                    }
-                                );
-            var ability = new Ability(
-                name: "Burst swim",
-                description: "",
-                cooldown: 2,
-                damages: []
+                "Tadpole",
+                new HealthAttributes { CurrentHealth = 15 },
+                new AttackAttributes { Strength = 2, Agility = 12 },
+                new DefenceAttributes { MaxHealth = 15, Armor = 0, IceRes = 1 }
             );
-            var fighter = new Fighter(
-                state: state,
-                TADPOLE_IMAGE,
-                abilities: [ability, ability, ability, ability]
-            );
-            return fighter;
+
+            var abilities = new Ability[]
+            {
+                new("Wiggle Dash", "A rapid dart to evade and reposition.", 1),
+                new("Tail Flick", "A quick slap of the tail.", 1, [new PhysicalDamage { Amount = 3 }]),
+                new("Murk Cloud", "Stir up silt to obscure vision.", 2), // Placeholder for blind/debuff
+                new("Slipstream", "Speed boost for the next turn.", 2) // Could apply a FighterStateMod
+            };
+
+            return new Fighter(state, TADPOLE_IMAGE, abilities);
         }
 
         private static Fighter EggFighter()
         {
             var state = new FighterState(
-                                    name: "Egg",
-                                    healthAttrs: new HealthAttributes
-                                    {
-                                        CurrentHealth = 4
-                                    },
-                                    attackAttrs: new AttackAttributes
-                                    {
-                                        Strength = 0,
-                                        Intellect = 0,
-                                        Wisdom = 0,
-                                        Agility = 0
-                                    },
-                                    defenceAttrs: new DefenceAttributes
-                                    {
-                                        MaxHealth = 4
-                                    }
-                                );
-            var ability = new Ability(
-                name: "Wait",
-                description: "Wait and pray",
-                cooldown: 1,
-                damages: []
+                "Egg",
+                new HealthAttributes { CurrentHealth = 5 },
+                new AttackAttributes { },
+                new DefenceAttributes { MaxHealth = 5, Armor = 0 }
             );
-            var fighter = new Fighter(
-                state: state,
-                EGG_IMAGE,
-                abilities: [ability, ability, ability, ability]
+
+            var abilities = new Ability[]
+            {
+                new("Wiggle Dash", "A rapid dart to evade and reposition.", 1),
+                new("Tail Flick", "A quick slap of the tail.", 1, [new PhysicalDamage { Amount = 3 }]),
+                new("Murk Cloud", "Stir up silt to obscure vision.", 2), // Placeholder for blind/debuff
+                new("Slipstream", "Speed boost for the next turn.", 2) // Could apply a FighterStateMod
+            };
+
+            return new Fighter(state, EGG_IMAGE, abilities);
+        }
+
+        private static Fighter SnakeFighter()
+        {
+            var state = new FighterState(
+                "Snake",
+                new HealthAttributes { CurrentHealth = 35 },
+                new AttackAttributes { Strength = 5, Agility = 6 },
+                new DefenceAttributes { MaxHealth = 35, Armor = 2 }
             );
-            return fighter;
+
+            var abilities = new Ability[]
+            {
+                new("Bite", "A venomous bite.", 1, [new PhysicalDamage { Amount = 6, PercentageArmorPen = 10 }]),
+                new("Constrict", "Wrap and squeeze (placeholder).", 2),
+                new("Hiss", "Intimidates the opponent (placeholder).", 2),
+                new("Slither Strike", "Hit and back off.", 1, [new PhysicalDamage { Amount = 4, FlatArmorPen = 2 }])
+            };
+
+            return new Fighter(state, SNAKE_IMAGE, abilities);
+        }
+
+        private static Fighter CrazyFrogFighter()
+        {
+            var state = new FighterState(
+                "Crazy Frog",
+                new HealthAttributes { CurrentHealth = 45 },
+                new AttackAttributes { Strength = 6, Agility = 7 },
+                new DefenceAttributes { MaxHealth = 45, Armor = 3 }
+            );
+
+            var abilities = new Ability[]
+            {
+                new("CHAOS PUNCH", "A wild unpredictable strike.", 1, [new PhysicalDamage { Amount = 8, PercentageArmorPen = 20 }]),
+                new("Lick Zap", "Magical tongue with electric spark.", 2, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }]),
+                new("Ribbit Slam", "Hits everyone (placeholder).", 3),
+                new("Evade!", "Boost agility (placeholder).", 2)
+            };
+
+            return new Fighter(state, CRAZYFROG_IMAGE, abilities);
+        }
+
+        private static Fighter BankerFighter()
+        {
+            var state = new FighterState(
+                "Banker",
+                new HealthAttributes { CurrentHealth = 40 },
+                new AttackAttributes { Intellect = 6, Wisdom = 5 },
+                new DefenceAttributes { MaxHealth = 40, Armor = 1, ArcaneRes = 5 }
+            );
+
+            var abilities = new Ability[]
+            {
+                new("Audit Beam", "Destroys financial irregularities.", 2, [new ArcaneDamage { Amount = 7, WisdomScaling = 1f }]),
+                new("Paper Shield", "Raises armor temporarily (placeholder).", 3),
+                new("Fine Print", "Debuffs enemy (placeholder).", 2),
+                new("Cash Smash", "Throw coins at the enemy.", 1, [new PhysicalDamage { Amount = 5 }])
+            };
+
+            return new Fighter(state, BANKER_IMAGE, abilities);
+        }
+
+        private static Fighter FishFighter()
+        {
+            var state = new FighterState(
+                "Predator Fish",
+                new HealthAttributes { CurrentHealth = 50 },
+                new AttackAttributes { Strength = 8, Agility = 4 },
+                new DefenceAttributes { MaxHealth = 50, Armor = 3 }
+            );
+
+            var abilities = new Ability[]
+            {
+                new("Bite", "A vicious snap with razor-sharp teeth.", 1, [new PhysicalDamage { Amount = 10, FlatArmorPen = 2 }]),
+                new("Feeding Frenzy", "Strike repeatedly in a flurry of bites.", 3, [new PhysicalDamage { Amount = 4, PercentageArmorPen = 25 }]),
+                new("Blood Scent", "Deal extra damage to already injured enemies (placeholder).", 2),
+                new("Fin Charge", "Ram the target with armored fins.", 2, [new PhysicalDamage { Amount = 6, FlatArmorPen = 1, PercentageArmorPen = 10 }])
+            };
+
+            return new Fighter(state, "🦈", abilities);
         }
 
         private static readonly string FROG_IMAGE = @"
@@ -293,5 +302,27 @@ namespace Metamon.Combat
 ..................;:......;;;;++;;................
 ..................:.::::::+;;+++;.................
 ..................+......x;;;+++..................".Trim();
+
+        private static readonly string FISH_IMAGE = @"
+..................................................
+..............................::;;;;:.............
+.................;++:.....;$x+xxxX$;..............
+............;+x+xxXXXxxxXXXxxxxxXx................
+.........:+x+xxXx:$xxxXxxxXxxXXXX:...........::::.
+......;xx+x$$+.:+x+xxX;XxxxxxxxXX+.........xxxxXXX
+..;+x+++++xxxxXx++XX:x;+xxxxXxxxxX;......+x+xXXx..
+xx++++++++xXx:::;x+;:x;+xxXXxxxxxxxX....:x+xXXx...
+.;+:::::;x+::;xxX+;+;x;+xxxxxxxxxxxxX:.;XxxxXX;...
+...:Xx++++xX++..:;..:;;XxxxxxxxxxxxxxxxxxXxXX+....
+....:+..+::..+x::.;:;;;xxxxxxxxxxxxxxxxxxxxXxx:...
+......;.;$+..;:..+x$;:Xxxxxxxxxxxx$+x:..:XxxXx;...
+........+x.:$+x:::x;::;xxxxxxX$X$.........+$xXX:..
+..........+:..:+x;:::::xxxxx+xxx:.................
+..........:+++;;;::::::;;Xxxxxxx$:................
+.............:;xXx++xXx;::+$XXXxxX$:..............
+...................:xxx.......::..................
+..................................................
+..................................................
+..................................................".Trim();
     }
 }

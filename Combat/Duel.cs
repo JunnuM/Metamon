@@ -21,7 +21,6 @@ namespace Metamon.Combat
             }
         }
 
-
         public Duel(Fighter leftFighter, Fighter rightFighter)
         {
             PlayerFighter = leftFighter;
@@ -98,5 +97,4 @@ namespace Metamon.Combat
             }
         }
     }
-
 }
