@@ -52,9 +52,9 @@ namespace Metamon.UI
             var playerFighter = _duel.PlayerFighter;
             var enemyFighter = _duel.EnemyFighter;
 
-            ConsoleUtils.DrawImageAt(playerFighter.Image, 1, 12, playerFighter.State.HealthNormalized(), ConsoleColor.Red, ConsoleColor.Gray);
+            ConsoleUtils.DrawImageAt(playerFighter.Image, 1, 12, playerFighter.State.HealthNormalized(), ConsoleColor.Gray, ConsoleColor.Red);
             ConsoleUtils.DrawImageAt(playerFighter.State.Name, 1, 31);
-            ConsoleUtils.DrawImageAt(enemyFighter.Image, 56, 12, enemyFighter.State.HealthNormalized(), ConsoleColor.Red, ConsoleColor.Gray);
+            ConsoleUtils.DrawImageAt(enemyFighter.Image, 56, 12, enemyFighter.State.HealthNormalized(), ConsoleColor.Gray, ConsoleColor.Red);
             ConsoleUtils.DrawImageAt(enemyFighter.State.Name, 56, 31);
         }
 
