@@ -49,7 +49,7 @@ namespace Metamon.Combat
             var croak = new Ability(
                 name: "Croak",
                 description: "",
-                cooldown: 10,
+                cooldown: 8,
                 damages: [new EventDamage { OnDeal = (s, t) =>
                     {
                         DuelDrawer.WriteToBattleLog("Croak");
@@ -66,9 +66,9 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Leap Strike", "", 3, [new PhysicalDamage { Amount = 6 }]),
+                new("Leap Strike", "", 8, [new PhysicalDamage { Amount = 6 }]),
                 croak,
-                new("Water Kick", "", 4, [new PhysicalDamage { Amount = 4, FlatArmorPen = 3 }]),
+                new("Water Kick", "", 6, [new PhysicalDamage { Amount = 4, FlatArmorPen = 3 }]),
                 croak
             };
 
@@ -87,7 +87,7 @@ namespace Metamon.Combat
             var grow = new Ability(
                 name: "Grow",
                 description: "",
-                cooldown: 16,
+                cooldown: 12,
                 damages: [new EventDamage { OnDeal = (s, t) => {
                     var success = GlobalRandom.NextBool(0.3f);
                     if (success)
@@ -187,14 +187,14 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Ding Ding", "", 6, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }, new HealDamage { PercentageAmount = 50 }]),
-                new("Swift Step", "", 12, [new EventDamage { OnDeal = (s, t) => {
+                new("Ding Ding", "", 6, [new ArcaneDamage { Amount = 4, WisdomScaling = 0.5f }, new HealDamage { PercentageAmount = 15 }]),
+                new("Swift Step", "", 10, [new EventDamage { OnDeal = (s, t) => {
                     var agilityMod = new AgilityMod { Name = "Swiftness", Duration = 8, FlatAddition = 11 };
                     agilityMod.AttachTo(s);
                     }
                 }]),
-                new("Turpiinveto", "", 18, [new PhysicalDamage { Amount = 12, AdditionalStrengthScaling = 1.2f }]),
-                new("Crazy Jab", "", 32, [new PhysicalDamage { Amount = 24, PercentageArmorPen = 65 }])
+                new("Ring ding", "", 6, [new PhysicalDamage { Amount = 12, AdditionalStrengthScaling = 1.2f }]),
+                new("Crazy Jab", "", 12, [new PhysicalDamage { Amount = 24, PercentageArmorPen = 65 }])
             };
 
             return new Fighter(state, CRAZYFROG_IMAGE, abilities);
@@ -211,7 +211,7 @@ namespace Metamon.Combat
 
             var abilities = new Ability[]
             {
-                new("Audit Beam", "Destroys financial irregularities.", 18, [new ArcaneDamage { Amount = 7, WisdomScaling = 1f }]),
+                new("Audit Beam", "Destroys financial irregularities.", 18, [new ArcaneDamage { Amount = 10, WisdomScaling = 1f }]),
                 new("Paper Shield", "Raises armor temporarily (placeholder).", 12),
             };
 
