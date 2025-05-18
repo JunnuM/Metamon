@@ -174,9 +174,11 @@ Welcome to Metamon.
 To your left, you will see yourself: your story starts as an egg.
 Will you survive through your transformations?
 
+Press Enter to start
+
 Tip:
 - Abilities match the arrows on the dance mat
-- Red = Health
+- Health is shown by changing colors
 
 
 Music by Juhani Junkala from opengameart (CC0)
